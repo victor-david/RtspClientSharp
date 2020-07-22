@@ -19,7 +19,7 @@ namespace SimpleRtspPlayer.RawFramesDecoding.FFmpeg
         Area = 0x20,
     }
 
-    enum FFmpegPixelFormat
+    public enum FFmpegPixelFormat
     {
         None = -1,
         BGR24 = 3,

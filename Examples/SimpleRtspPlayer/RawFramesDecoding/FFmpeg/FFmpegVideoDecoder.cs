@@ -75,9 +75,10 @@ namespace SimpleRtspPlayer.RawFramesDecoding.FFmpeg
                     }
                 }
 
-                lock (disposalLock) {
-                    if (_disposed) {
-                        Console.WriteLine("Skipped decoding video frame, as decoder was disposed. (Therefore the frame probably wasn't wanted)");
+                lock (disposalLock) 
+                {
+                    if (_disposed) 
+                    {
                         return null;
                     }
 
@@ -89,22 +90,22 @@ namespace SimpleRtspPlayer.RawFramesDecoding.FFmpeg
                         return null;
 
                     if (_currentFrameParameters.Width != width || _currentFrameParameters.Height != height ||
-                        _currentFrameParameters.PixelFormat != pixelFormat) {
+                        _currentFrameParameters.PixelFormat != pixelFormat) 
+                    {
                         _currentFrameParameters = new DecodedVideoFrameParameters(width, height, pixelFormat);
                         DropAllVideoScalers();
                     }
                 }
 
-                return new DecodedVideoFrame(TransformTo);
+                return new DecodedVideoFrame(TransformTo, _currentFrameParameters);
             }
         }
 
         public void Dispose()
         {
-            lock (disposalLock) {
-                if (_disposed)
-                    return;
-
+            lock (disposalLock) 
+            {
+                if (_disposed) return;
                 _disposed = true;
                 FFmpegVideoPInvoke.RemoveVideoDecoder(_decoderHandle);
                 DropAllVideoScalers();
@@ -115,8 +116,9 @@ namespace SimpleRtspPlayer.RawFramesDecoding.FFmpeg
         private void DropAllVideoScalers()
         {
             foreach (var scaler in _scalersMap.Values)
+            {
                 scaler.Dispose();
-
+            }
             _scalersMap.Clear();
         }
 
@@ -128,9 +130,10 @@ namespace SimpleRtspPlayer.RawFramesDecoding.FFmpeg
                 _scalersMap.Add(parameters, videoScaler);
             }
 
-            lock (disposalLock) {
-                if (_disposed) {
-                    Console.WriteLine("Skipped scaling video frame, as decoder was disposed. (Therefore the frame probably wasn't wanted)");
+            lock (disposalLock) 
+            {
+                if (_disposed) 
+                {
                     return;
                 }
 
