@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -13,6 +14,7 @@ namespace SimpleRtspPlayer.GUI.ViewModels
     {
         private const string RtspPrefix = "rtsp://";
         private const string HttpPrefix = "http://";
+        private const string DeviceFile = @"D:\vds\Confidential\Keys\camera1.txt";
 
         private string _status = string.Empty;
         private readonly IMainWindowModel _mainWindowModel;
@@ -45,10 +47,17 @@ namespace SimpleRtspPlayer.GUI.ViewModels
         public MainWindowViewModel(IMainWindowModel mainWindowModel)
         {
             _mainWindowModel = mainWindowModel ?? throw new ArgumentNullException(nameof(mainWindowModel));
-            
             StartClickCommand = new RelayCommand(OnStartButtonClick, () => _startButtonEnabled);
             StopClickCommand = new RelayCommand(OnStopButtonClick, () => _stopButtonEnabled);
             ClosingCommand = new RelayCommand<CancelEventArgs>(OnClosing);
+            /* make easier for testing */
+            if (File.Exists(DeviceFile))
+            {
+                string[] lines = File.ReadAllLines(DeviceFile);
+                if (lines.Length > 0) DeviceAddress = lines[0];
+                if (lines.Length > 1) Login = lines[1];
+                if (lines.Length > 2) Password = lines[2];
+            }
         }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
