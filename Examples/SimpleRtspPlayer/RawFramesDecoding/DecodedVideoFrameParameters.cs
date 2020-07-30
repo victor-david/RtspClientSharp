@@ -40,5 +40,10 @@ namespace SimpleRtspPlayer.RawFramesDecoding
                 return hashCode;
             }
         }
+
+        public override string ToString()
+        {
+            return $"Size {Width}x{Height}, Pixel: {PixelFormat}";
+        }
     }
 }
